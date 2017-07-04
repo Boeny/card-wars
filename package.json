@@ -1,0 +1,25 @@
+{
+  "name": "card-wars",
+  "version": "0.0.1",
+  "description": "",
+  "main": "rules.js",
+  "scripts": {
+    "test": "mocha test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/boeny/card-wars.git"
+  },
+  "keywords": [
+    "card"
+  ],
+  "author": "boeny",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/boeny/card-wars/issues"
+  },
+  "homepage": "https://github.com/boeny/card-wars#readme",
+  "devDependencies": {
+    "chai": "^4.0.2"
+  }
+}
