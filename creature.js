@@ -2,11 +2,35 @@ var Creature = function(params){
 	this.init(params);
 };
 
+Creature.create = function(index, params){
+	var mod = {
+		off: random(0, 100),
+		def: random(0, 100),
+		eng: random(0, 20)
+	};
+	
+	var defaults = {
+		index: index,
+		
+		range: 0,
+		energy: random(50, 100),
+		offence: random(0, 10),
+		defence: random(0, 10),
+		
+		modify: function(){
+			this.oldParams = merge({}, this, ['offence','defence','energy']);
+			this.offence += mod.off - 50;
+			this.defence += mod.def - 50;
+			this.energy += mod.eng - 10;
+		}
+	};
+	
+	return new Creature(merge(defaults, params || {}));
+};
+
 Creature.prototype = {
-	constructor: Creature,
 	init: function(params){
 		this.getDistance = null;
-		this.create = null;
 		this.modify = null;
 		this.pool = [];
 		this.range = 0;
@@ -36,17 +60,7 @@ Creature.prototype = {
 	},
 	
 	kill: function(target){
-		target = target || this;
-		var i = target.index;
-		
-		var params = {};//target.getParams();
-		params.pool = this.pool;
-		
-		/*foreach (['offence','defence'], (f) => {
-			params[f] += random(-1,1);
-		});*/
-		
-		this.pool.splice(i, 1, this.create(i, params));
+		this.pool.splice((target || this).index, 1);
 	},
 	
 	isDead: function(target){

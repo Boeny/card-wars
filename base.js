@@ -21,6 +21,9 @@ global.in_array = function(v, arr){
 };
 
 global.merge = function(dest, src, fields){
+	if (!dest) return src || {};
+	if (!src) return dest || {};
+	
 	foreach (src, (v, f) => {
 		if (!fields || in_array(f, fields)){
 			dest[f] = v;

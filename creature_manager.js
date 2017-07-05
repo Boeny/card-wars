@@ -2,6 +2,7 @@ var CreatureManager = function(params){
 	this.init(params);
 	
 	if (this.createAtStartCount > 0){
+		if (!this.maxCount) this.maxCount = this.createAtStartCount;
 		this.create(this.createAtStartCount);
 	}
 };
@@ -11,17 +12,20 @@ CreatureManager.prototype = {
 	init: function(params){
 		this.maxCount = 0;
 		this.createAtStartCount = 0;
-		this.creatureClass = null;
 		this.getCreature = null;
 		this.pool = [];
 		merge(this, params);
 	},
 	
 	create: function(count){
+		count = count || this.maxCount;
+		
 		_for (count, (i) => {
-			if (i == this.maxCount) return false;
+			if (this.maxCount && i == this.maxCount) return false;
 			this.pool.push(this.getCreature(i, {pool: this.pool}));
 		});
+		
+		return this;
 	},
 	
 	fight: function(){
@@ -29,13 +33,6 @@ CreatureManager.prototype = {
 			foreach (c1.getInRange(), (c2) => {
 				c1.fight(c2);
 			});
-		});
-	},
-	
-	getResult: function(){
-		console.log(this.pool);
-		foreach (this.pool, (c) => {
-			console.log(c.enemies);
 		});
 	}
 };

@@ -1,25 +1,30 @@
 var assert = require('chai').assert;
 
+function run_test(text, callback){
+	it(text, function(){
+		var res = callback(assert);
+		if (res === undefined) return;
+		
+		if (res instanceof Array){
+			assert[res[0] && typeof res[0] == 'object' ? 'deepEqual' : 'equal'](res[0], res[1], res[2]);
+			return;
+		}
+		
+		assert.isTrue(res);
+	});
+}
+
+function describe_tests(title, subtests){
+	describe(title, function(){
+		for (var text in subtests){
+			run_test(text, subtests[text]);
+		}
+	});
+}
+
 function test(tests){
 	for (var title in tests){
-		describe(title, ()=>{
-			var subtests = tests[title];
-			
-			for (var text in subtests){
-				it(text, ()=>{
-					var res = subtests[text]();
-					
-					if (res instanceof Array){
-						assert.equal(res[0],res[1]);
-						return;
-					}
-					
-					if (typeof res == 'boolean'){
-						assert(res);
-					}
-				});
-			}
-		});
+		describe_tests(title, tests[title]);
 	}
 };
 
@@ -34,8 +39,6 @@ module.exports = function(modules){
 	}
 	
 	for (var name in modules){
-		describe(name, ()=>{
-			test(modules[name]);
-		});
+		((tests) => {describe(name, ()=>{test(tests)})})(modules[name]);
 	}
 };
